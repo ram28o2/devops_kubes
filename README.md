@@ -19,7 +19,7 @@ Users can search, filter, paginate, mark favorites, and view detailed informatio
 * **Search**
 
   * Search Pokémon by name
-  * Updates results instantly as the user types
+  * Filters results in real-time as the user types
 
 * **Filter by Type**
 
@@ -29,7 +29,7 @@ Users can search, filter, paginate, mark favorites, and view detailed informatio
 * **Pagination**
 
   * Navigate through Pokémon using next/previous controls
-  * Efficient client-side pagination
+  * Pagination is handled on the client side using array slicing
 
 * **Favorites**
 
@@ -46,7 +46,7 @@ Users can search, filter, paginate, mark favorites, and view detailed informatio
 * **Loading & Error Handling**
 
   * Loading spinner while fetching data
-  * Graceful error message handling
+  * Basic error handling for API failures
 
 ---
 
@@ -68,8 +68,15 @@ Users can search, filter, paginate, mark favorites, and view detailed informatio
 * **Frontend:** React (JavaScript)
 * **HTTP Client:** Axios
 * **State Management:** React Hooks (useState, useEffect)
-* **Styling:** Plain CSS (beginner-friendly, no frameworks)
+* **Styling:** Plain CSS
 * **API:** PokéAPI
+
+---
+
+# ⚡ Performance Considerations
+* Limited the number of Pokémon fetched per request to avoid long loading times
+* Used parallel API calls (Promise.all) to improve data fetching speed
+* Avoided unnecessary re-renders by managing state updates carefully
 
 ---
 
@@ -102,8 +109,8 @@ src/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
-cd pokedex-lite
+git clone https://github.com/Ramprasanth7119/pokedex_lite.git
+cd pokedex_lite
 ```
 
 ---
@@ -119,7 +126,7 @@ npm install
 ### 3. Run the application
 
 ```bash
-npm start
+npm run dev
 ```
 
 ---
@@ -127,7 +134,7 @@ npm start
 ### 4. Open in browser
 
 ```
-http://localhost:3000
+http://localhost:5173
 ```
 
 ---
@@ -142,92 +149,115 @@ http://localhost:3000
 
 ## ✨ Animations
 
-* Subtle animations added for better user experience:
+* Added simple CSS-based animations for better UX:
 
-  * Card hover effects
+  * Card hover effect
   * Button interactions
-  * Modal transitions
-  * Page transitions
+  * Modal open transition
+  * Page transition
 
 ---
 
 ## 🔐 OAuth Authentication (Separate Branch)
 
-* A basic OAuth login flow is implemented as a proof-of-concept in a separate branch:
+* Google OAuth login is implemented as a proof-of-concept in a separate branch:
 
 ```
-auth-oauth
+auth-google
 ```
 
-### Includes:
-
-* Google Login (working)
-* GitHub Login (basic PoC using redirect flow)
-
-### Purpose:
-
-* Demonstrates understanding of OAuth authentication
-* Not a full production implementation
+* This demonstrates basic integration of third-party authentication in the UI.
+* It is a frontend-only implementation (no backend).
 
 ---
 
 ## ⚡ Server-Side Rendering (SSR)
 
-* SSR was explored conceptually using frameworks like Next.js
+* Explored SSR conceptually using frameworks like Next.js
 
 ### Benefits:
 
-* Faster initial page load
+* Faster initial load
 * Better SEO
 
 ### Status:
 
-* Not implemented in the main project
-* Can be added in a separate branch if needed
+* Not implemented in this project
 
 ---
 
 # ⚠️ Challenges Faced
 
-* Handling large API data efficiently
-* Managing pagination with filtering and search together
-* Avoiding unnecessary API calls
-* Maintaining smooth UI while fetching data
+* **Filtering only worked on the current page initially**
+
+  * When pagination was added, filtering was applied only to the current page’s data
+  * This caused cases where valid results existed but were not shown
+
+* **Pagination + Filtering conflict**
+
+  * Example: selecting a type on page 10 sometimes showed “No Pokémon found”
+  * Even though matching Pokémon existed on other pages
+
+* **Handling large API data**
+
+  * Fetching detailed data (images, stats) for many Pokémon caused delays
+  * Needed to balance performance vs usability
+
+* **UI issues with small result sets**
+
+  * When only one Pokémon was shown, the layout stretched awkwardly
 
 ---
 
 # 💡 Solutions
 
-* Used client-side filtering after fetching data
-* Implemented pagination using array slicing
-* Used localStorage for persistence (favorites)
-* Managed loading state carefully to avoid UI flicker
+* **Adjusted filtering approach**
+
+  * Instead of relying only on paginated data, Updated the logic to reset pagination when filters change, ensuring users always see relevant results
+  * Reset pagination when search/type changes to avoid empty states
+
+* **Handled empty states properly**
+
+  * Added clear message:
+
+    * “No Pokémon found on this page”
+  * This avoids confusion for users
+
+* **Optimized data fetching**
+
+  * Limited number of Pokémon fetched at once
+  * Used `Promise.all` efficiently for parallel API calls
+
+* **Improved UI behavior**
+
+  * Fixed layout issues when fewer items are displayed
+  * Ensured grid remains consistent
 
 ---
 
 # 📌 Future Improvements
 
-* Improve performance with caching
-* Add backend for full OAuth authentication
-* Enhance UI with better design system
-* Add unit testing
+* Improve performance using caching or lazy loading
+* Add backend support for full authentication
+* Improve UI design and accessibility
+* Add unit and integration testing
 
 ---
 
 # 🔗 Live Demo
 
-👉 (Add your Vercel / Netlify link here)
+👉 Live Demo: https://pokedex-lite-xi.vercel.app/
 
 ---
 
 # 📂 Repository
 
-👉 (Add your GitHub repo link here)
+👉 Github Repo: https://github.com/Ramprasanth7119/pokedex_lite.git
 
 ---
 
 # 🙌 Conclusion
 
-This project focuses on building a clean, responsive, and user-friendly application while following good coding practices and scalable structure.
+This project focuses on building a clean and functional application while handling real-world issues like pagination, filtering, and API performance.
 
 ---
